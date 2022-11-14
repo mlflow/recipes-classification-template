@@ -17,7 +17,7 @@ from typing import Dict
 from pandas import DataFrame
 
 
-def get_custom_metrics(
+def custom_metric(
     eval_df: DataFrame,
     builtin_metrics: Dict[str, float],  # pylint: disable=unused-argument
 ) -> float:
@@ -35,4 +35,5 @@ def get_custom_metrics(
     """
     # FIXME::OPTIONAL: implement custom metrics calculation here.
 
-    raise NotImplementedError
+
+    return 0.5

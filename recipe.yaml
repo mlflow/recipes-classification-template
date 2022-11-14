@@ -17,15 +17,15 @@
 
 recipe: "classification/v1"
 # FIXME::REQUIRED: Specifies the target column name for model training and evaluation.
-target_col: ""
+target_col: "target"
 # FIXME::REQUIRED: Specifies the value of `target_col` that is considered the positive class.
-positive_class: ""
+positive_class: 1
 # FIXME::REQUIRED: Sets the primary metric to use to evaluate model performance. This primary
 #                  metric is used to select best performing models in MLflow UI as well as in
 #                  train and evaluation step.
 #                  Built-in metrics are: true_negatives, false_positives, false_negatives,
 #                  true_positives, recall_score, precision_score, f1_score, accuracy_score.
-primary_metric: ""
+primary_metric: "accuracy_score"
 steps:
   # Specifies the dataset to use for model development
   ingest: {{INGEST_CONFIG}}
@@ -47,15 +47,16 @@ steps:
     #
     # FIXME::REQUIRED: Specifies the method to use for training. Options are "automl/flaml" for
     #                  AutoML training or "custom" for user-defined estimators.
-    using: ""
+    using: "automl/flaml"
+    # estimator_method: estimator_fn
   evaluate:
     #
     # FIXME::OPTIONAL: Sets performance thresholds that a trained model must meet in order to be
     #                  eligible for registration to the MLflow Model Registry.
     #
-    # validation_criteria:
-    #   - metric: f1_score
-    #     threshold: 0.9
+    validation_criteria:
+      - metric: accuracy_score
+        threshold: 0.5
   register:
     # Indicates whether or not a model that fails to meet performance thresholds should still
     # be registered to the MLflow Model Registry
@@ -68,9 +69,9 @@ steps:
   #   model_uri: "models/model.pkl"
   #   result_type: "double"
   #   save_mode: "default
-# custom_metrics:
-#   FIXME::OPTIONAL: Defines custom performance metrics to compute during model development.
-#     - name: ""
-#       function: get_custom_metrics
-#       greater_is_better: False
+custom_metrics:
+  # FIXME::OPTIONAL: Defines custom performance metrics to compute during model development.
+    - name: custom_metric
+      function: custom_metric
+      greater_is_better: False
 
