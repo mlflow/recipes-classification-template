@@ -1,10 +1,10 @@
 # MLflow Recipes Classification Template
 The MLflow Classification Recipe is an [MLflow Recipe](https://mlflow.org/docs/latest/recipes.html)
-(previously known as MLflow Pipeline) for developing high-quality classisification models. 
+(previously known as MLflow Pipeline) for developing high-quality classification models. 
 It is designed for developing models using scikit-learn and frameworks that integrate with scikit-learn, 
 such as the `XGBClassifier` API from XGBoost.
 
-This repository is a template for developing production-ready classisification models with the MLflow Classification Recipe.
+This repository is a template for developing production-ready classification models with the MLflow Classification Recipe.
 It provides a recipe structure for creating models as well as pointers to configurations and code files that should
 be filled in to produce a working recipe.
 
@@ -35,9 +35,9 @@ You may need to install additional libraries for extra features:
 These libraries are available natively in the [Databricks Runtime for Machine Learning](https://docs.databricks.com/runtime/mlruntime.html).
 
 ## Get started
-After installing MLflow Recipes, you can clone this repository to get started. Simply fill in the required values annotated by `FIXME::REQUIRED` comments in the [Recipe configuration file](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml) 
-and in the appropriate profile configuration: [`local.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/profiles/local.yaml) 
-(if running locally) or [`databricks.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/profiles/databricks.yaml) 
+After installing MLflow Recipes, you can clone this repository to get started. Simply fill in the required values annotated by `FIXME::REQUIRED` comments in the [Recipe configuration file](https://github.com/mlflow/recipes-classification-template/blob/main/recipe.yaml) 
+and in the appropriate profile configuration: [`local.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/profiles/local.yaml) 
+(if running locally) or [`databricks.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/profiles/databricks.yaml) 
 (if running on Databricks).
 
 The Recipe will then be in a runnable state, and when run completely, will produce a trained model ready for batch
@@ -84,8 +84,8 @@ A detailed reference for each step follows.
 ### Step artifacts
 Each of the steps in the recipe produces artifacts after completion. These artifacts consist of cards containing
 detailed execution information, as well as other step-specific information.
-The [`Recipe.inspect()`](https://mlflow.org/docs/latest/python_api/mlflow.recipes.html#mlflow.recipes.classisification.v1.recipe.ClassificationRecipe.inspect)
-API is used to view step cards. The [`get_artifact`](https://mlflow.org/docs/latest/python_api/mlflow.recipes.html#mlflow.recipes.classisification.v1.recipe.ClassificationRecipe.get_artifact)
+The [`Recipe.inspect()`](https://mlflow.org/docs/latest/python_api/mlflow.recipes.html#mlflow.recipes.classification.v1.recipe.ClassificationRecipe.inspect)
+API is used to view step cards. The [`get_artifact`](https://mlflow.org/docs/latest/python_api/mlflow.recipes.html#mlflow.recipes.classification.v1.recipe.ClassificationRecipe.get_artifact)
 API is used to load all other step artifacts by name.  
 Per-step artifacts are further detailed in the following step references.
 
@@ -109,21 +109,21 @@ The name of the primary evaluation metric.
   ```
 
 ### Ingest step
-The ingest step resolves the dataset specified by the `steps.ingest` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml)
+The ingest step resolves the dataset specified by the `steps.ingest` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/recipe.yaml)
 and converts it to parquet format, leveraging the custom loader code specified in the `steps.ingest` section if necessary.  
 **Note**: If you make changes to the dataset referenced by the ingest step (e.g. by adding new records or columns), 
 you must manually re-run the ingest step in order to use the updated dataset in the recipe. 
 The ingest step does not automatically detect changes in the dataset.
 
 The custom loader function allows use of datasets in other formats, such as `csv`. 
-The function should be defined in [`steps/ingest.py`](https://github.com/mlflow/recipes-classisification-template/blob/main/steps/ingest.py),
+The function should be defined in [`steps/ingest.py`](https://github.com/mlflow/recipes-classification-template/blob/main/steps/ingest.py),
 and should accept two parameters:
 - `file_path`: `str`. Path to the dataset file.
 - `file_format`: `str`. The file format string, such as `"csv"`.
 
-It should return a Pandas DataFrame representing the content of the specified file. [`steps/ingest.py`](https://github.com/mlflow/recipes-classisification-template/blob/main/steps/ingest.py) contains an example placeholder function.
+It should return a Pandas DataFrame representing the content of the specified file. [`steps/ingest.py`](https://github.com/mlflow/recipes-classification-template/blob/main/steps/ingest.py) contains an example placeholder function.
 
-The input dataset is specified by the `steps.ingest` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml) as follows: 
+The input dataset is specified by the `steps.ingest` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/recipe.yaml) as follows: 
 <details>
 <summary><strong><u>Full configuration reference</u></strong></summary>
 
@@ -176,8 +176,8 @@ The split step splits the ingested dataset produced by the ingest step into:
 - a test dataset for model performance evaluation.  
 
 The fraction of records allocated to each dataset is defined by the `split_ratios` attribute of the `split` step
-definition in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml). 
-The split step also preprocesses the datasets using logic defined in [`steps/split.py`](https://github.com/mlflow/recipes-classisification-template/blob/main/steps/split.py).
+definition in [`recipe.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/recipe.yaml). 
+The split step also preprocesses the datasets using logic defined in [`steps/split.py`](https://github.com/mlflow/recipes-classification-template/blob/main/steps/split.py).
 Subsequent steps use these datasets to develop a model and measure its performance.
 
 The post-split method should be written in `steps/split.py` and should accept three parameters:
@@ -220,11 +220,11 @@ creating transformed datasets that are used by subsequent steps for estimator tr
 
 The user-defined transformation function is not required. If absent, an **identity transformer** will be used.
 The user-defined function should be written in
-[`steps/transform.py`](https://github.com/mlflow/recipes-classisification-template/blob/main/steps/transform.py), 
+[`steps/transform.py`](https://github.com/mlflow/recipes-classification-template/blob/main/steps/transform.py), 
 and should return an unfitted estimator that is sklearn-compatible; that is, the returned object should define 
 `fit()` and `transform()` methods. `steps/transform.py` contains an example placeholder function.
 
-The transform step is configured by the `steps.transform` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml):
+The transform step is configured by the `steps.transform` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/recipe.yaml):
 <details>
 <summary><strong><u>Full configuration reference</u></strong></summary>
 
@@ -250,12 +250,12 @@ The train step uses the transformed training dataset output from the transform s
 from the transform step to create a model recipe. Finally, this model recipe is evaluated against 
 the transformed training and validation datasets to compute performance metrics.  
 
-Custom evaluation metrics are computed according to definitions in [`steps/custom_metrics.py`](https://github.com/mlflow/recipes-classisification-template/blob/main/steps/custom_metrics.py)
+Custom evaluation metrics are computed according to definitions in [`steps/custom_metrics.py`](https://github.com/mlflow/recipes-classification-template/blob/main/steps/custom_metrics.py)
 and the `metrics` section of `recipe.yaml`; see [Custom Metrics](#custom-metrics) section for reference. 
 
 The model recipe and its associated parameters, performance metrics, and lineage information are logged to [MLflow Tracking](https://www.mlflow.org/docs/latest/tracking.html), producing an MLflow Run.
 
-The train step is configured by the `steps.train` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml):
+The train step is configured by the `steps.train` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/recipe.yaml):
 
 If using AutoML to train, specify:
 ```
@@ -267,7 +267,7 @@ Otherwise, if using a user-defined estimator function to train, specify:
 estimator_method: estimator_fn
 ```
 
-The user-defined estimator function should be written in [`steps/train.py`](https://github.com/mlflow/recipes-classisification-template/blob/main/steps/train.py), 
+The user-defined estimator function should be written in [`steps/train.py`](https://github.com/mlflow/recipes-classification-template/blob/main/steps/train.py), 
 and should return an unfitted estimator that is `sklearn`-compatible; that is, the returned object should define 
 `fit()` and `transform()` methods. `steps/train.py` contains an example placeholder function.
 
@@ -349,12 +349,12 @@ whether or not a model is validated to be registered to the [MLflow Model Regist
 by the subsequent [register step](#register-step).  
 These model performance thresholds are defined in the 
 `validation_criteria` section of the `evaluate` step definition in `recipe.yaml`. 
-Custom evaluation metrics are computed according to definitions in [`steps/custom_metrics.py`](https://github.com/mlflow/recipes-classisification-template/blob/main/steps/custom_metrics.py)
+Custom evaluation metrics are computed according to definitions in [`steps/custom_metrics.py`](https://github.com/mlflow/recipes-classification-template/blob/main/steps/custom_metrics.py)
 and the `metrics` section of `recipe.yaml`; see the [custom metrics section](#custom-metrics) for reference. 
 
 Model performance metrics and explanations are logged to the same MLflow Tracking Run used by the train step.
 
-The evaluate step is configured by the `steps.evaluate` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml):
+The evaluate step is configured by the `steps.evaluate` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/recipe.yaml):
 <details>
 <summary><strong><u>Full configuration reference</u></strong></summary>
 
@@ -385,7 +385,7 @@ MLflow Model Registry.
 If the model recipe is registered to the MLflow Model Registry, a `registered_model_version` is produced containing 
 the model name and the model version.
 
-The register step is configured by the `steps.register` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml):
+The register step is configured by the `steps.register` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/recipe.yaml):
 <details>
 <summary><strong><u>Full configuration reference</u></strong></summary>
 
@@ -400,11 +400,11 @@ registered in this step.
 
 
 ### Batch scoring
-After model training, the classisification recipe provides the capability to score new data with the
+After model training, the classification recipe provides the capability to score new data with the
 trained model.
 
 #### Ingest Scoring step
-The ingest scoring step, defined in the `steps.ingest_scoring` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml), 
+The ingest scoring step, defined in the `steps.ingest_scoring` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/recipe.yaml), 
 specifies the dataset used for batch scoring and has the same API as the [ingest step](#ingest-step).
 
 **Step artifacts**:
@@ -416,7 +416,7 @@ ingested dataset produced by the [ingest scoring step](#ingest-scoring-step) and
 dataset to the specified output format and location. To fix a specific model for use in the predict 
 step, provide its model URI as the `model_uri` attribute of the `recipe.yaml` predict step definition.
 
-The predict step is configured by the `steps.predict` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml):
+The predict step is configured by the `steps.predict` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/recipe.yaml):
 <details>
 <summary><strong><u>Full configuration reference</u></strong></summary>
 
@@ -469,8 +469,8 @@ for more information.
 
 ### MLflow Tracking / Model Registry configuration
 The MLflow Tracking server can be configured to log MLflow runs to a specific server. Tracking information is specified
-in the profile configuration files - [`profiles/local.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/profiles/local.yaml)
-if running locally and [`profiles/databricks.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/profiles/databricks.yaml) 
+in the profile configuration files - [`profiles/local.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/profiles/local.yaml)
+if running locally and [`profiles/databricks.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/profiles/databricks.yaml) 
 if running on Databricks.  
 
 Configuring a tracking server is optional. If this configuration is absent, the default experiment will be used.
@@ -511,9 +511,9 @@ Evaluation metrics calculate model performance against different datasets. The m
 will be calculated as part of the training and evaluation steps, and calculated values will be recorded in each 
 step’s information card.
 
-This classisification recipe features a set of built-in metrics, and supports user-defined metrics as well.
+This classification recipe features a set of built-in metrics, and supports user-defined metrics as well.
 
-Metrics are configured under the `custom_metrics` section of [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml), according to the following specification:
+Metrics are configured under the `custom_metrics` section of [`recipe.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/recipe.yaml), according to the following specification:
 <details>
 <summary><strong><u>Full configuration reference</u></strong></summary>
 
@@ -540,7 +540,7 @@ The following metrics are built-in. Note that `greater_is_better = True` for all
 Custom evaluation metrics define how trained models should be evaluated against custom criteria not captured by 
 built-in `sklearn` evaluation metrics.
 
-Custom evaluation metric functions should be defined in [`steps/custom_metrics.py`](https://github.com/mlflow/recipes-classisification-template/blob/main/steps/custom_metrics.py). 
+Custom evaluation metric functions should be defined in [`steps/custom_metrics.py`](https://github.com/mlflow/recipes-classification-template/blob/main/steps/custom_metrics.py). 
 Each should accept two parameters:
 - `eval_df`: DataFrame.  
 A Pandas DataFrame containing two columns:
@@ -553,7 +553,7 @@ The built-in metrics calculated during model evaluation. Maps metric names to co
 
 The custom metric function should return a scalar numeric value.
 
-Custom metrics are specified as a list under the `metrics.custom` key in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml), specified as follows:
+Custom metrics are specified as a list under the `metrics.custom` key in [`recipe.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/recipe.yaml), specified as follows:
 - `name`: string. Required.  
 Name of the custom metric. This will be the name by which you refer to this metric when including it in model evaluation or model training.
 
