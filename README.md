@@ -1,4 +1,12 @@
 # MLflow Recipes Classification Template
+## Table of contents
+- [Key Features](#key-features)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+  - [Model Development](#model-development)
+  - [Productionization](#productionization)
+- [Reference Guide](#reference-guide)
+
 The MLflow Classification Recipe is an [MLflow Recipe](https://mlflow.org/docs/latest/recipes.html)
 (previously known as MLflow Pipeline) for developing high-quality classification models. 
 It is designed for developing models using scikit-learn and frameworks that integrate with scikit-learn, 
@@ -26,7 +34,8 @@ Your contribution to MLflow Recipes is greatly appreciated by the community!
 - Starter code for ingest, split, transform and train steps
 - Cards containing step results, including dataset profiles, model leaderboard, performance plots and more
 
-## Installation
+## Getting Started
+### Installation
 Follow the [MLflow Recipes installation guide](https://mlflow.org/docs/latest/recipes.html#installation). 
 You may need to install additional libraries for extra features:
 - [Hyperopt](https://pypi.org/project/hyperopt/)  is required for hyperparameter tuning.
@@ -34,7 +43,7 @@ You may need to install additional libraries for extra features:
 - [Delta](https://pypi.org/project/delta-spark/) is required to ingest Delta tables.
 These libraries are available natively in the [Databricks Runtime for Machine Learning](https://docs.databricks.com/runtime/mlruntime.html).
 
-## Get started
+## Model Development
 After installing MLflow Recipes, you can clone this repository to get started. Simply fill in the required values annotated by `FIXME::REQUIRED` comments in the [Recipe configuration file](https://github.com/mlflow/recipes-classification-template/blob/main/recipe.yaml) 
 and in the appropriate profile configuration: [`local.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/profiles/local.yaml) 
 (if running locally) or [`databricks.yaml`](https://github.com/mlflow/recipes-classification-template/blob/main/profiles/databricks.yaml) 
@@ -47,11 +56,19 @@ To iterate and improve your model, follow the [MLflow Recipes usage guide](https
 Note that iteration will likely involve filling in the optional `FIXME`s in the 
 step code files with your own code, in addition to the configuration keys.
 
-## Reference
+### Productionization
+Once the model under development has reached desired quality,
+one may programatically run the adapted recipe to either reproduce the model consistently,
+or train a production model with different input data source (e.g. production dataset)
+via automated processes such as continuous deployment (CD).
+Below are recommendations for productionizing a recipe depending on its running environments:
+- [Local|CICD] Running the recipe via command line: `mlflow recipes run --profile {PROFILE}`
+- [Databricks] Creating a new notebook (e.g. `notebooks/databricks_prod.py`),
+               instantiate and run the entire recipe via `r = Recipe(profile=PROFILE); r.run()` with desired profile.
+
+## Reference Guide
+Below is a visual overview of the MLflow Regression Recipe's information flow.
 <img width="710" alt="DAG" src="https://user-images.githubusercontent.com/78067366/200443468-bde64875-c3af-4e89-a36d-7b5b73297d51.png">
-
-
-This is a visual overview of the MLflow Classification Recipe's information flow.
 
 Model develompent consists of the following sequential steps:
 ```
