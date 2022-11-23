@@ -7,7 +7,7 @@ This module defines the following routines used by the 'ingest' step:
 from pandas import DataFrame
 
 
-def load_file_as_dataframe(file_path: str, file_format: str) -> DataFrame:
+def load_file_as_dataframe(location: str) -> DataFrame:
     """
     Load content from the specified dataset file as a Pandas DataFrame.
 
@@ -16,7 +16,7 @@ def load_file_as_dataframe(file_path: str, file_format: str) -> DataFrame:
     called once for each file in the dataset, and MLflow Recipes automatically combines the
     resulting DataFrames together.
 
-    :param file_path: The path to the dataset file.
+    :param location: The path to the dataset file.
     :param file_format: The file format string, such as "csv".
     :return: A Pandas DataFrame representing the content of the specified file.
     """
