@@ -462,6 +462,7 @@ the transformed training and validation datasets to compute performance metrics.
 Custom evaluation metrics are computed according to definitions in [`steps/custom_metrics.py`](https://github.com/mlflow/recipes-classification-template/blob/main/steps/custom_metrics.py)
 and the `metrics` section of `recipe.yaml`; see [Custom Metrics](#custom-metrics) section for reference. 
 Hyper-parameter tuning during the train step can also be enabled as a step config in the `steps.train` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml).
+Prediction scores for all classes are computed for classification problem by default. Additional configurations could be updated in the `steps.train` as well.
 
 The model recipe and its associated parameters, performance metrics, and lineage information are logged to [MLflow Tracking](https://www.mlflow.org/docs/latest/tracking.html), producing an MLflow Run.
 
@@ -478,12 +479,20 @@ Below are all the possible options and full reference guide for different config
   - `flaml_params`: Dict. Optional.  
   Any additional parameters to pass along to FLAML.
 
+  - `predict_scores_for_all_classes`: boolean. Optional. Defaults to `True`
+  A boolean value used to enable probability predictions for all classes
+
+  - `predict_prefix`: boolean. String. Defaults to `predicted_`
+  prefix string to prefix the column with predicted scores and label
+
   Example config in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml):
   ```
   steps:
     train:
       using: "automl/flaml"
       time_budget_secs: 3000
+      predict_scores_for_all_classes: True
+      predict_prefix: "predicted_"
   ```
 </details>
 
@@ -525,12 +534,20 @@ Below are all the possible options and full reference guide for different config
     - `parameters`: list. Required.  
     `hyperopt` search space in yaml format.
 
+    - `predict_scores_for_all_classes`: boolean. Optional. Defaults to `True`
+    A boolean value used to enable probability predictions for all classes
+
+    - `predict_prefix`: boolean. String. Defaults to `predicted_`
+    prefix string to prefix the column with predicted scores and label
+
   Example config in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml):
   ```
   steps:
     train:
       using: "custom"
       estimator_method: estimator_fn
+      predict_scores_for_all_classes: True
+      predict_prefix: "predicted_"
       tuning:
         enabled: True
         algorithm: "hyperopt.rand.suggest"
