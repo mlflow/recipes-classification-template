@@ -462,7 +462,7 @@ the transformed training and validation datasets to compute performance metrics.
 Custom evaluation metrics are computed according to definitions in [`steps/custom_metrics.py`](https://github.com/mlflow/recipes-classification-template/blob/main/steps/custom_metrics.py)
 and the `metrics` section of `recipe.yaml`; see [Custom Metrics](#custom-metrics) section for reference. 
 Hyper-parameter tuning during the train step can also be enabled as a step config in the `steps.train` section in [`recipe.yaml`](https://github.com/mlflow/recipes-classisification-template/blob/main/recipe.yaml).
-Prediction scores for all classes are computed for classification problem by default. Additional configurations could be updated in the `steps.train` as well.
+Prediction scores and Label encoding for all classes are computed for classification problem by default. Additional configurations could be updated in the `steps.train` as well.
 
 The model recipe and its associated parameters, performance metrics, and lineage information are logged to [MLflow Tracking](https://www.mlflow.org/docs/latest/tracking.html), producing an MLflow Run.
 
@@ -510,6 +510,18 @@ Below are all the possible options and full reference guide for different config
     ```
     estimator_method: estimator_fn
     ```
+
+  - `calibrate_proba`: string. Optional. 
+  Probability calibration can be enabled by passing in the method to use for calibration.
+  Values could either be ‘sigmoid’ or ‘isotonic’.
+
+    For more information, see sklearn [CalibratedClassifierCV](https://scikit-learn.org/stable/modules/generated/sklearn.calibration.CalibratedClassifierCV.html). If we want to use more options, feel free to not set `calibrate_proba` and directly wrap estimator_method in [`steps/train.py`](https://github.com/mlflow/recipes-classisification-template/blob/main/steps/train.py) with `CalibratedClassifierCV`
+
+      <u>Example</u>:
+
+      ```
+      calibrate_proba: isotonic
+      ```
 
   - <strong>Tuning configuration reference</strong>
 
