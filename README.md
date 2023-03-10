@@ -544,7 +544,7 @@ Below are all the possible options and full reference guide for different config
     Sampling fraction in the range `(0, 1.0]` to indicate the amount of data used in tuning.
 
     - `parameters`: list. Required.  
-    `hyperopt` search space in yaml format.
+    `hyperopt` search space in yaml format. Full spec on parameters can be found [here](https://github.com/hyperopt/hyperopt/blob/master/hyperopt/pyll_utils.py).
 
     - `predict_scores_for_all_classes`: boolean. Optional. Defaults to `True`
     A boolean value used to enable probability predictions for all classes
